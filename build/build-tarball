@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Depends on the following
+# - Docker is running
+
+docker build . -t nixpine:latest
+CONTAINER_ID=$(docker run -d nixpine:latest /bin/busybox sleep infinity)
+docker export $CONTAINER_ID -o nixpine.tar || EXPORT_STATUS=$?
+
+if [[ $EXPORT_STATUS != 0 ]]; then
+  echo "Export failed"
+else
+  echo "Export succeded, tarball located at nixpine/build/nixpine.tar"
+  echo "To import to wsl run 'wsl --import <distro name> <filesystem location> .\nixpine.tar'"
+fi
