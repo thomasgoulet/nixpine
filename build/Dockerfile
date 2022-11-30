@@ -29,6 +29,8 @@ RUN chown $DEFAULT_USER:$DEFAULT_USER /home/$DEFAULT_USER/nix.sh
 USER $DEFAULT_USER
 ENV USER=$DEFAULT_USER
 WORKDIR /home/$DEFAULT_USER
+
+# Run install script and clean it
 RUN mkdir .config/nix/ -p && echo "sandbox = false" > .config/nix/nix.conf
 RUN ./nix.sh --no-daemon
 RUN rm nix.sh
@@ -38,7 +40,7 @@ ENV NIX_PATH=${NIX_PATH:+$NIX_PATH:}/home/$DEFAULT_USER/.nix-defexpr/channels
 ENV NIX_PROFILES="/nix/var/nix/profiles/default /home/$DEFAULT_USER/.nix-profile"
 ENV NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 ENV PATH=/home/$DEFAULT_USER/.nix-profile/bin:$PATH
-RUN env >> .profile && sed -i -e 's/^/export /' .profile
+RUN echo $(env | sed -e 's/^/export /' | sed -e "s/\/.*$/\'&\'/") > .profile
 
 # Install home-manager
 RUN nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
