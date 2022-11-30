@@ -1,5 +1,4 @@
 #!/bin/sh
-
-nix build --no-link <flake-uri>#homeConfigurations.jdoe.activationPackage
-"$(nix path-info <flake-uri>#homeConfigurations.jdoe.activationPackage)"/activate
-home-manager switch --flake '<flake-uri>#jdoe'
+nix build --no-link ./nixpine#homeConfigurations.thomas.activationPackage
+"$(nix path-info ./nixpine#homeConfigurations.thomas.activationPackage)"/activate
+home-manager switch --flake './nixpine#thomas'
