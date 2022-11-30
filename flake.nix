@@ -10,27 +10,22 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }:
   let
   
     system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
+    pkgs = nixpkgs.legacyPackages.${system};
   
   in {
     
-    defaultPackage.x86_64-linux = home-manager.defaultPackage.x86_64-linux;
-    
     home-manager-configuration = {
       thomas = home-manager.lib.homeManagerConfiguration {
-        inherit system pkgs;
-        username = "thomas";
-        homeDirectory = "/home/thomas";
-        configuration.imports = [
+        inherit pkgs;
+        
+        modules = [
           ./home.nix
         ];
+        
       };
     };
     
