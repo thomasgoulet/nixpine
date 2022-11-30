@@ -11,24 +11,20 @@
   };
 
   outputs = { nixpkgs, home-manager, ... }:
-  let
-  
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-  
-  in {
-    
-    home-manager-configuration = {
-      thomas = home-manager.lib.homeManagerConfiguration {
+    let
+
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+
+    in {
+
+      homeConfigurations.thomas = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        
         modules = [
           ./home.nix
         ];
-        
       };
+
     };
-    
-  };
 
 }
