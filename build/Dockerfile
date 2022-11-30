@@ -49,6 +49,7 @@ RUN echo $(env | sed -e 's/^/export /' | sed -e "s/\/.*$/\'&\'/") > .profile
 
 # Install my home-manager configuration / Step is not cached if new commit
 ADD "https://api.github.com/repos/thomasgoulet/nixpine/commits?per_page=1" latest_commit
+RUN rm latest_commit -f
 RUN git clone $NIX_FLAKE_REPO
 RUN ./nixpine/setup.sh
 
