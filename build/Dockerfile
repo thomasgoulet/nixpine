@@ -2,12 +2,13 @@ FROM alpine:latest
 
 ARG DEFAULT_USER=thomas
 ARG DEFAULT_PASS=thomas
-ARG NIXCONF=TODO
+ARG NIX_FLAKE_REPO=https://github.com/thomasgoulet/nixpine.git
 
 # Dependencies needed for nix installation / curl sudo tar xz
 # Group & user management / shadow openssl
+# Installing flake / git
 # Default shell / bash
-RUN apk add --no-cache bash curl openssl shadow sudo tar xz
+RUN apk add --no-cache bash curl openssl git shadow sudo tar xz
 
 # Enable group wheel to use sudo
 RUN echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
@@ -32,8 +33,8 @@ WORKDIR /home/$DEFAULT_USER
 
 # Run install script and clean it
 RUN mkdir .config/nix/ -p 
-RUN echo "sandbox = false" > .config/nix/nix.conf
-RUN echo "experimental-features = nix-command flakes" > .config/nix/nix.conf
+RUN echo "sandbox = false" >> .config/nix/nix.conf
+RUN echo "experimental-features = nix-command flakes" >> .config/nix/nix.conf
 
 
 RUN ./nix.sh --no-daemon
@@ -46,12 +47,9 @@ ENV NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 ENV PATH=/home/$DEFAULT_USER/.nix-profile/bin:$PATH
 RUN echo $(env | sed -e 's/^/export /' | sed -e "s/\/.*$/\'&\'/") > .profile
 
-# Install home-manager
-RUN nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
-RUN nix-channel --update
-RUN nix-shell '<home-manager>' -A install
-
 # TODO Install my home-manager configuration
+RUN git clone $NIX_FLAKE_REPO
+RUN ./nixpine/setup.sh
 
 # Garbage collect before finishing
 RUN nix-collect-garbage
