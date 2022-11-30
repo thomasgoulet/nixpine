@@ -47,7 +47,8 @@ ENV NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 ENV PATH=/home/$DEFAULT_USER/.nix-profile/bin:$PATH
 RUN echo $(env | sed -e 's/^/export /' | sed -e "s/\/.*$/\'&\'/") > .profile
 
-# TODO Install my home-manager configuration
+# Install my home-manager configuration / Step is not cached if new commit
+ADD curl "https://api.github.com/repos/thomasgoulet/nixpine/commits?per_page=1" latest_commit
 RUN git clone $NIX_FLAKE_REPO
 RUN ./nixpine/setup.sh
 
