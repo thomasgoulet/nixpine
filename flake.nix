@@ -1,28 +1,30 @@
 {
-  
-  description = "Flake for home-manager on Alpine / WSL";
-  
+
+  description = "Flake configuration for home-maanger insisde WSL / Alpine";
+
   inputs = {
-    
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.follows = "nixpkgs";
-    
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
+
+  outputs = { nixpkgs, home-manager, ... }:
+  let
   
-  outputs = inputs: {
-    
-    defaultPackage.x86_64-linux = home-manager.defaultPackage.x86_64-linux;
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  
+  in {
     
     homeConfigurations = {
-      "thomas" = inputs.home-manager.lib.homeManagerConfiguration {
-        system = "x86_64";
-        homeDirectory = "/home/thomas";
-        username = "thomas";
-        configuration.imports = [ ./home.nix ];
+      thomas = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [ ./home.nix ];
       };
     };
     
   };
-  
+
 }

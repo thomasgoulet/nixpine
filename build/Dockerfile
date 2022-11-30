@@ -31,7 +31,11 @@ ENV USER=$DEFAULT_USER
 WORKDIR /home/$DEFAULT_USER
 
 # Run install script and clean it
-RUN mkdir .config/nix/ -p && echo "sandbox = false" > .config/nix/nix.conf
+RUN mkdir .config/nix/ -p 
+RUN echo "sandbox = false" > .config/nix/nix.conf
+RUN echo "experimental-features = nix-command flakes" > .config/nix/nix.conf
+
+
 RUN ./nix.sh --no-daemon
 RUN rm nix.sh
 
