@@ -1,0 +1,15 @@
+## Python
+
+[[language]]
+name = "python"
+auto-format = true
+indent = { tab-width = 4, unit = "	" }
+formatter = { command = "black", args = ["-", "-l160"]}
+
+[[language]]
+name = "c-sharp"
+language-server = { command = "omnisharp", args = [ "--languageserver" ] }
+
+[[language]]
+name = "bash"
+language-server = { command = "" }

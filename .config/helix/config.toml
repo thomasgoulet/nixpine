@@ -1,0 +1,82 @@
+theme = "thom"
+
+[editor]
+bufferline = "always"
+color-modes = true
+idle-timeout = 0 # Time for auto-completion to pop-up
+line-number = "relative"
+mouse = false
+shell = ["nu", "-c"]
+true-color = true
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["diagnostics", "selections", "position", "position-percentage", "file-encoding", "file-line-ending", "file-type"]
+separator = "-"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-messages = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+[editor.auto-pairs]
+"(" = ")"
+"{" = "}"
+"[" = "]"
+"'" = "'"
+'"' = '"'
+"`" = "`"
+"<" = ">"
+
+[editor.whitespace.render]
+tab = "all"
+
+[editor.whitespace.characters]
+tab = "→"
+tabpad = "·"
+
+[editor.indent-guides]
+character = "|"
+render = true
+
+[keys.normal]
+"\\" = "command_palette"
+"esc" = "keep_primary_selection"
+C-s = ":wq"
+C-w = "rotate_view"
+D = "delete_char_backward"
+G = "goto_last_line"
+H = ":bp"
+L = ":bn"
+S = ["select_all", "select_regex"]
+y = ["yank", ":clipboard-yank"]
+X = "extend_line_above"
+
+[keys.normal.space]
+space = ":wa"
+C = ":bc!"
+c = ":bc"
+f = [":new", ":insert-output source ~/.config/nushell/config.nu; hx_lfpick", "select_all", "split_selection_on_newline", "goto_file", "goto_last_modified_file", ":bc!"]
+F = "file_picker"
+q = ":q"
+Q = ":qa!"
+z = "suspend"
+"[" = "jump_view_left"
+"]" = "jump_view_right"
+
+[keys.normal.space.t]
+b = ":sh zellij run -f -c -- btop"
+d = [":wa", ":sh zellij run -f -- git diff"]
+g = [":wa", ":sh zellij run -f -c -- lazygit"]
+k = ":sh zellij run -f -c -- k9s"
+t = ":sh zellij run -f -c -n ~ -- nu -e 'let-env config = ($env.config | update keybindings ($env.config.keybindings | append {name: exit-shell, modifier: none, keycode: esc, mode: emacs, event: { send: ctrld }}))'"

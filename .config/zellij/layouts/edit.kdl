@@ -1,0 +1,20 @@
+layout {
+    tab {
+        pane split_direction="vertical" {
+            pane {
+                command "helix"
+                args "."
+                name "EDITOR"
+            }
+            pane {
+                command "lazygit"
+                name "GIT"
+            }
+            pane
+        }
+
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+    }
+}
