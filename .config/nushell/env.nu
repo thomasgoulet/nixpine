@@ -1,12 +1,20 @@
 # Nushell Environment Config File
 
-# Use zoxide
-mkdir ~/.cache/zoxide
-zoxide init nushell --cmd j | save -f ~/.cache/zoxide/init.nu
+let-env ENV_CONVERSIONS = {
+  "PATH": {
+    from_string: { |s| $s | split row (char esep) | path expand -n }
+    to_string: { |v| $v | path expand -n | str join (char esep) }
+  }
+}
 
-# Use starship
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+if '/home/thomas/bin' not-in $env.PATH {
+  let-env PATH = ($env.PATH | prepend '.nix-profile/bin')
+  let-env PATH = ($env.PATH | prepend '.config/carapace/bin')
+  let-env PATH = ($env.PATH | prepend 'bin')
+  let-env PATH = ($env.PATH | prepend 'local/bin')
+  let-env PATH = ($env.PATH | prepend 'go/bin')
+  let-env PATH = ($env.PATH | prepend 'cargo/bin')
+}
 
 # Environment variables
 let-env EDITOR = "hx"
@@ -17,13 +25,6 @@ let-env PAGER = "less -RF --no-init"
 let-env STARSHIP_CONFIG = "/home/thomas/.config/starship/config.toml"
 let-env _ZO_FZF_OPTS = "--height 40% --reverse --inline-info --tiebreak length --bind 'tab:down' --bind 'shift-tab:up' --preview 'llt {2}'"
 
-let-env ENV_CONVERSIONS = {
-  "PATH": {
-    from_string: { |s| $s | split row (char esep) | path expand -n }
-    to_string: { |v| $v | path expand -n | str join (char esep) }
-  }
-}
-
 let-env NU_LIB_DIRS = [
     ($nu.config-path | path dirname | path join 'scripts')
 ]
@@ -32,10 +33,10 @@ let-env NU_PLUGIN_DIRS = [
     ($nu.config-path | path dirname | path join 'plugins')
 ]
 
-let-env PATH = ($env.PATH | split row (char esep) | prepend '/home/thomas/')
-let-env PATH = ($env.PATH | split row (char esep) | prepend '/home/thomas/bin')
-let-env PATH = ($env.PATH | split row (char esep) | prepend '/home/thomas/.nix-profile/bin')
-let-env PATH = ($env.PATH | split row (char esep) | prepend '/home/thomas/go/bin')
-let-env PATH = ($env.PATH | split row (char esep) | prepend '/home/thomas/.config/carapace/bin')
-let-env PATH = ($env.PATH | split row (char esep) | prepend 'local/bin')
-let-env PATH = ($env.PATH | split row (char esep) | prepend 'cargo/bin')
+# Use zoxide
+mkdir ~/.cache/zoxide
+zoxide init nushell --cmd j | save -f ~/.cache/zoxide/init.nu
+
+# Use starship
+mkdir ~/.cache/starship
+starship init nu | save -f ~/.cache/starship/init.nu

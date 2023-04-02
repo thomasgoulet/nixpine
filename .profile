@@ -5,6 +5,6 @@ function dotfiles {
 }
 
 function dotfiles-install {
-   nix run $HOME/.config/flake switch -- --flake $HOME/.config/flake
+   nix run $HOME/.nixpine switch -- --flake $HOME/.nixpine
    home-manager switch --flake "$HOME/.config/flake#$USER"
 }
