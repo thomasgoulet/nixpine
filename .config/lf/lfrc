@@ -3,7 +3,7 @@ set icons
 set previewer ~/.config/lf/preview.sh
 set ratios 1:1:5
 
-cmd open $helix $fx
+cmd open $hx $fx
 cmd on-quit cd $fx
 
 cmd zi ${{
